@@ -1,0 +1,86 @@
+---
+title: "NDI_GLSS7_DendrogramScore"
+author: "Zachary Gersten, PhD, MPH"
+date: "January 2024"
+output: 
+---
+
+# NDI_GLSS7_DendrogramScore: Creating the functional diversity measurement in R Vegan
+
+__Required Input Files__
+  - *nutrienttraitmatrix.csv* - Nutrient trait matrix
+  - *hhfoodexp.csv* - Household food expenditure 
+
+__Information__
+This script ...
+
+  1) Reads in the GLss 7 nutrient trait matrix and selects nutrient traits
+  2) Calculates the Euclidean distance for each food pair and stores values in a square distance matrix
+  3) Applies hierarchical Clustering using UPGMA to the distance matrix and creates the food dendrogram
+  4) Assesses the total NDI GLSS 7 score
+  5) Assesses the raw household NDI GLSS 7 score
+
+__Output__
+  - distancematrix.csv
+  - fooddendrogram.jpeg
+  
+```{r Load packages, include= FALSE, warning=FALSE, message=FALSE}
+library(vegan)
+library(readxl)
+library(tidyverse)
+library(writexl)
+library(dendextend)
+library(circlize)
+library(ggplot2)
+library(ggdendro)
+```  
+  
+  
+```{r Set working directory} 
+setwd("C...")
+```   
+
+
+```{r Load Data, include=FALSE}
+nutrienttraitmatrix <- read_csv("nutrienttraitmatrix.csv")
+nutrienttraitmatrixframe <- as.data.frame(nutrienttraitmatrix)
+rownames(nutrienttraitmatrixframe) <- nutrienttraitmatrixframe$foodname
+nutrienttraitmatrixframe <- nutrienttraitmatrixframe[, -1]
+```
+
+
+```{r Create distance matrix}
+distancematrix <- vegdist(nutrienttraitmatrixframe, method="euclidean")
+write.csv(distancematrix, "distancematrix.csv")
+```
+
+
+```{r Hierarchal cluster of distance matrix}  
+foodclusters <- hclust(distancematrix, method = "average")
+jpeg(file = 'fooddendrogram.jpeg', quality = 100, width = 2000, height = 1000)
+plot(foodclusters, hang = -1, cex = 1)
+```
+
+
+```{r Display food dendrogram}
+ggdendrogram(foodclusters, rotate = TRUE, theme_dendro = FALSE)
+
+```
+
+```{r Find the sum of the lengths of the connecting segments in a dendrogram as the total NDI GLSS 7 score}
+treeheight(foodclusters)
+```
+
+
+```{r Load Data, include=FALSE}
+hhfoodexp <- read_csv("hhfoodexp.csv")
+hhfoodexpframe <- as.data.frame(hhfoodexp)
+rownames(hhfoodexpframe) <- hhfoodexpframe$hid
+hhfoodexpframe <- hhfoodexpframe[, -1]
+```
+
+
+```{r Find the tree height for each household for the raw household NDI GLss7 score}
+rawhhNDIscore <- treedive(hhfoodexpframe, foodclusters)
+write.csv(rawhhNDIscore, "rawhhNDIscore.csv")
+```
