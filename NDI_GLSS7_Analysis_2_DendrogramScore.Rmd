@@ -37,7 +37,7 @@ library(ggdendro)
   
   
 ```{r Set working directory} 
-setwd("C...")
+setwd("C:/Users/zachary.gersten/Box/USDA/2_USDA-ARS/Indicator Development/GLSS 7 NDI/GitHub")
 ```   
 
 
