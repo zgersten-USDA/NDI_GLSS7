@@ -421,7 +421,7 @@
  
 //	*4. Total food expenditure by food item marked by food group number
 		quietly forval j = 1/100 {
-			bysort hid: egen totexp`j'_0 = total(totexp_item_imp) if (foodnum == `j')
+			bysort hid: egen totexp`j'_0 = total(totexp_item_rep) if (foodnum == `j')
 			bysort hid: egen totexp`j' = mean(totexp`j'_0)
 			drop totexp`j'_0
 			}
@@ -439,13 +439,15 @@
  
 //	*6. Keep household-level variables
 		bysort hid: gen line_n = _n
-			keep if line_n == 1
-			drop line_n
+		keep if line_n == 1
+		drop line_n
 	
 		quietly forval j = 1/100 {
 			drop if fdexpi`j' == .
 			}
  			
+		keep hid clust fdexpi1-fdexpi100
+ 
  
 // *7. Save file
  		save "hhfoodexp", replace
