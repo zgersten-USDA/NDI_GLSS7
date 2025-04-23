@@ -446,7 +446,7 @@
 			drop if fdexpi`j' == .
 			}
  			
-		keep hid clust fdexpi1-fdexpi100
+		keep hid clust nh fdexpi1-fdexpi100
  
  
 // *7. Save file
