@@ -32,10 +32,10 @@ Nutrient trait matrix
 Scripts in each set are intended to be run sequentially.
 
 **Merging food items into food groups and creating binary food expenditure variables**  
-1) NDI_GLSS7_Analysis_1_CleanFoodExpGroups
+- NDI_GLSS7_Analysis_1_CleanFoodExpGroups
 
 **Calculate distances, cluster in food dendrogram, and generate the total and household NDI scores**  
-2) NDI_GLSS7_Analysis_2_DendrogramScore
+- NDI_GLSS7_Analysis_2_DendrogramScore
 
 **Assess relationships between NDI scores and household covariates**   
-3) NDI_GLSS7_Analysis_3_GNDIRegressions
+- NDI_GLSS7_Analysis_3_GNDIRegressions
